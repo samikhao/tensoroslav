@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Игра “Поиграй за Тензорослава”</title>
+</head>
+<body>
+
+  <h1>Игра “Поиграй за Тензорослава”</h1>
+
+  <div>
+    <p>
+      Цель — подобрать целочисленные веса W0–W9 (от
+      {{ int_min }} до {{ int_max }}), при которых предсказанное MSE минимально.
+    </p>
+    <p>
+      <a href="/new">Новая игра</a>
+      {% if sid %}Сессия: {{ sid }}{% endif %}
+    </p>
+  </div>
+
+  <form action="/predict" method="post">
+    <input type="hidden" name="sid" value="{{ sid }}">
+    <div>
+      {% for i in range(D) %}
+      <label>
+        W{{ i }}
+        <input name="w{{ i }}" type="number" step="1" min="{{ int_min }}" max="{{ int_max }}" required>
+      </label>
+      {% endfor %}
+    </div>
+    <button>Предсказать MSE</button>
+  </form>
+
+  {% if last_mse is defined %}
+    <h3>Предсказанное MSE: {{ '%.6f'|format(last_mse) }}</h3>
+  {% endif %}
+
+  <h2>История</h2>
+  {% if history %}
+  <table>
+    <tr>
+      <th>#</th>
+      <th>W-вектор</th>
+      <th>MSE (модель)</th>
+    </tr>
+    {% for row in history %}
+    <tr>
+      <td>{{ loop.index }}</td>
+      <td>{{ row.w | join(', ') }}</td>
+      <td>{{ row.mse }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% else %}
+    <p>История пуста — введите первые веса и нажмите «Предсказать MSE».</p>
+  {% endif %}
+
+</body>
+</html>
