@@ -15,7 +15,7 @@ app = FastAPI(title="Tensoroslav Game")
 
 
 templates = Jinja2Templates(directory="app/templates")
-MODEL = joblib.load("ridge_poly.joblib")
+MODEL = joblib.load("model/ridge_poly.joblib")
 
 D = 10
 INT_MIN, INT_MAX = -5, 5
